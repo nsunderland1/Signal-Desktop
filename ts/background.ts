@@ -871,6 +871,10 @@ type WhatIsThis = typeof window.WhatIsThis;
       const state = store.getState();
       const selectedId = state.conversations.selectedConversation;
       const conversation = window.ConversationController.get(selectedId);
+      const callId = state.calling.callDetails?.callId;
+      const callInPip = state.calling.pip;
+      const localVideoEnabled = state.calling.hasLocalVideo;
+      const localAudioEnabled = state.calling.hasLocalAudio;
       const isSearching = window.Signal.State.Selectors.search.isSearching(
         state
       );
@@ -1121,6 +1125,20 @@ type WhatIsThis = typeof window.WhatIsThis;
           event.stopPropagation();
           return;
         }
+      }
+      // toggle local video
+      if (callId && callInPip && shiftKey && (key === 'v' || key === 'V')) {
+        const { setLocalVideo } = actions.calling;
+        setLocalVideo({ callId, enabled: !localVideoEnabled });
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      // toggle local audio
+      if (callId && callInPip && shiftKey && (key === 'm' || key === 'M')) {
+        const { setLocalAudio } = actions.calling;
+        setLocalAudio({ callId, enabled: !localAudioEnabled });
+        event.preventDefault();
+        event.stopPropagation();
       }
 
       // Preferences - handled by Electron-managed keyboard shortcuts
