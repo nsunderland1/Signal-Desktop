@@ -101,7 +101,7 @@ export class CallScreen extends React.Component<PropsType, StateType> {
   };
 
   handleKeyDown = (event: KeyboardEvent): void => {
-    const { callDetails } = this.props;
+    const { callDetails, togglePip } = this.props;
 
     if (!callDetails) {
       return;
@@ -114,6 +114,9 @@ export class CallScreen extends React.Component<PropsType, StateType> {
       eventHandled = true;
     } else if (event.shiftKey && (event.key === 'M' || event.key === 'm')) {
       this.toggleAudio();
+      eventHandled = true;
+    } else if (event.key === 'Escape') {
+      togglePip();
       eventHandled = true;
     }
 
